@@ -17,9 +17,11 @@ class Render {
 		}
 	}
 	start(){ //starts engine ticking and rendering
-	
+		this.runner = requestAnimationFrame(() => {
+			//prolly add objects to be rendered in here
+		});
 	}
 	stop(){
-	
+		cancelAnimationFrame(this.runner);
 	}
 }
