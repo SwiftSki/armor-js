@@ -2,6 +2,8 @@ class Render {
 	constructor(canvasID, options){
 		this.canvas = document.getElementById(canvasID);
 		
+		
+		//this takes the options and applies them if needed
 		let prop;
 		for (prop in this) {
 			if (Object.prototype.hasOwnProperty.call(this, prop)) {
@@ -13,5 +15,11 @@ class Render {
 				this[prop] = options[prop];
 			}
 		}
+	}
+	start(){ //starts engine ticking and rendering
+	
+	}
+	stop(){
+	
 	}
 }
