@@ -5,7 +5,9 @@ class World {
 			min: {x: -Infinity, y: -Infinity},
 			max: {x: Infinity, y: Infinity}
 		};
-		this.entities = [];
+    this.airResistance = 0.5;
+    this.entities = [];
+    this.lastID = -1;
 		
 		let prop;
 		for (prop in this) {
@@ -21,7 +23,34 @@ class World {
 	}
 	
 	add(objects){
-		this.entities.push(objects);
-		this.entities = this.entities.flat();
+    if(objects[0] != undefined){ //array
+      objects.map(obj => {
+        this.lastID++;
+        obj.id = this.lastID;
+        this.entities.push(obj);
+      });
+    } else { //object
+      this.lastID++;
+      obj.id = this.lastID;
+      this.entities.push(obj);
+    }
 	}
+  remove(objects){
+    if(objects[0] != undefined) { //array
+      objects.map(obj => {
+        console.log(this);
+        this.entities.map(current => {
+          if(obj.id == current.id) obj = '';
+        });
+      });
+    } else { //object
+      console.log('object mode');
+      this.entities.map((current, index) => {
+        if(objects.id == current.id) this.entities[index] = '';
+      });
+    }
+    this.entities.sort();
+    while(this.entities[0] == '') this.entities.shift();
+  }
+
 }
