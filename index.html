@@ -1,13 +1,60 @@
 <!DOCTYPE html>
+<!--
+  CHANGELOG:
+  - started documentation in README
+  - added extras.js file for extra stuff. e.g. terrain
+  - added interactions.js for holding functions for interactiong with objects. Not    putting those functions in the objects themseves should save a lot of RAM
+  - set up static background to avoid multiple canvases
+  - added callbacks everywhere
+  - added angle, velocity, and friction properties to bodies
+  - added airResistance property to world
+  - added mass property to body
+
+  TODO:
+  get engine to do physics
+  get renderer to re-angle objects according to their angle property
+  add interactions
+  fix terrain filling when object fills
+  add IDs to objects for easier referencing
+-->
 <html>
 	<head>
-		<script src="common.js"></script>
 		<script src="render.js"></script>
 		<script src="engine.js"></script>
 		<script src="armor.js"></script>
 		<script src="world.js"></script>
+    <script src='body.js'></script>
+    <script src="extras.js"></script>
 	</head>
 	<body>
-		<canvas width='400' height='400' id='game' />
+    <canvas width='800' height='800' id='game' style='position:absolute;left:0px;top:0px'/>
+    <script>
+      "use strict";
+      var world = new World();
+      var renderer = new Render(world, 'game', {
+        background: () => { //this is the static background
+          extras.terrain(renderer, 25, 2131030031111103);
+        }
+      });
+      var engine = new Engine(world, renderer);
+
+      var bodies = [
+//        new Body('ellipse', 100, 100, 200, 200), 
+        new Body('rect', 100, 200, 200, 200),
+        new Body('rect', renderer.canvas.width, 40, renderer.canvas.width / 2, renderer.canvas.height, {isStatic: true, label: 'floor'}),
+        new Body('ellipse', 50, 75, 50, 25)
+      ];
+      world.add(bodies);
+      
+      engine.start(100, function(){
+        //console.log('ticked');
+      });
+
+      //global error handler
+      window.onerror = err => {
+        engine.stop();
+        console.log(err);
+      }
+    </script>
 	</body>
 </html>
