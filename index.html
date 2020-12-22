@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+  CHANGELOG:
+  - started documentation in README
+  - added extras.js file for extra stuff. e.g. terrain
+  - added interactions.js for holding functions for interactiong with objects. Not    putting those functions in the objects themseves should save a lot of RAM
+  - set up static background to avoid multiple canvases
+  - added callbacks everywhere
+  - added angle, velocity, and friction properties to bodies
+  - added airResistance property to world
+  - added mass property to body
+
+  TODO:
+  get engine to do physics
+  get renderer to re-angle objects according to their angle property
+  add interactions
+  fix filling
+  a bunch of circles
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="render.js"></script>
+    <script src="engine.js"></script>
+    <script src="armor.js"></script>
+    <script src="world.js"></script>
+    <script src='body.js'></script>
+    <script src="extras.js"></script>
+</head>
+
+<body>
+    <canvas width='600' height='600' id='game' style='position:absolute;left:0px;top:0px'></canvas>
+    <script>
+        "use strict";
+        {
+            let canvas = document.getElementById('game');
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+        }
+
+        var world = new World();
+        var renderer = new Render(world, 'game', {
+            renderHitboxes: true,
+            //wireframes: true
+        });
+        var engine = new Engine(world, renderer);
+
+        var bodies = [
+            new Body('circle', 200, 100, 400, 200, {fill: '#A52A2A'}), 
+            new Body('rect', 100, 200, 200, 200),
+            new Body('rect', renderer.canvas.width, 40, renderer.canvas.width / 2, renderer.canvas.height, { isStatic: true, label: 'floor' }),
+            new Body('circle', 50, 75, 50, 25)
+        ];
+        world.add(bodies);
+
+        //engine.start(100);
+        engine.tick();
+
+        //global error handler
+        window.onerror = err => {
+            engine.stop();
+            console.log(err);
+        }
+    </script>
+</body>
+
+</html>
